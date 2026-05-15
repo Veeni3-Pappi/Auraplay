@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- FEATURE: Project Scaffolding — All user-facing strings -->
+<resources>
+    <string name="app_name">Auraplay</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_tagline">Your music. Clean and private.</string>
+    <string name="onboarding_get_started">Get Started</string>
+    <string name="onboarding_storage_title">Storage Access</string>
+    <string name="onboarding_storage_desc">Auraplay needs access to your music files to build your library. Your files never leave your device.</string>
+    <string name="onboarding_grant_permission">Grant Permission</string>
+    <string name="onboarding_grant_in_settings">Grant in Settings</string>
+    <string name="onboarding_smart_filter_title">We cleaned up your library</string>
+    <string name="onboarding_smart_filter_desc">Auraplay automatically hides WhatsApp audio, call recordings, voice memos, and other non-music files from your library.</string>
+    <string name="onboarding_done">Done</string>
+
+    <!-- Navigation -->
+    <string name="nav_library">Library</string>
+    <string name="nav_playlists">Playlists</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Library tabs -->
+    <string name="tab_songs">Songs</string>
+    <string name="tab_albums">Albums</string>
+    <string name="tab_artists">Artists</string>
+    <string name="tab_genres">Genres</string>
+    <string name="tab_folders">Folders</string>
+
+    <!-- Sort options -->
+    <string name="sort_title">Title</string>
+    <string name="sort_artist">Artist</string>
+    <string name="sort_date_added">Date Added</string>
+    <string name="sort_duration">Duration</string>
+    <string name="sort_name">Name</string>
+    <string name="sort_year">Year</string>
+    <string name="sort_track_count">Track Count</string>
+    <string name="sort_ascending">Ascending</string>
+    <string name="sort_descending">Descending</string>
+
+    <!-- Playback -->
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="shuffle">Shuffle</string>
+    <string name="repeat">Repeat</string>
+    <string name="repeat_all">Repeat All</string>
+    <string name="repeat_one">Repeat One</string>
+    <string name="repeat_off">Repeat Off</string>
+    <string name="play_next">Play Next</string>
+    <string name="add_to_queue">Add to Queue</string>
+    <string name="clear_queue">Clear Queue</string>
+    <string name="queue">Queue</string>
+
+    <!-- Now Playing -->
+    <string name="now_playing">Now Playing</string>
+    <string name="add_to_playlist">Add to Playlist</string>
+    <string name="lyrics">Lyrics</string>
+    <string name="more_options">More</string>
+
+    <!-- Search -->
+    <string name="search_hint">Search songs, albums, artists…</string>
+    <string name="search_no_results">No results found</string>
+    <string name="search_recent">Recent Searches</string>
+    <string name="search_clear_recent">Clear</string>
+    <string name="play_results_as_queue">Play results as queue</string>
+
+    <!-- Playlists -->
+    <string name="create_playlist">Create Playlist</string>
+    <string name="rename_playlist">Rename Playlist</string>
+    <string name="delete_playlist">Delete Playlist</string>
+    <string name="playlist_name_hint">Playlist name</string>
+    <string name="favorites">Favorites</string>
+    <string name="add_to_favorites">Add to Favorites</string>
+    <string name="remove_from_favorites">Remove from Favorites</string>
+
+    <!-- Settings -->
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_theme_system">Follow System</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_dynamic_color">Dynamic Color (Material You)</string>
+    <string name="settings_corner_radius">Corner Radius</string>
+    <string name="settings_playback">Playback</string>
+    <string name="settings_crossfade">Crossfade Duration</string>
+    <string name="settings_crossfade_seconds">%d seconds</string>
+    <string name="settings_default_sort">Default Sort Order</string>
+    <string name="settings_min_duration">Minimum File Duration</string>
+    <string name="settings_min_duration_seconds">%d seconds</string>
+    <string name="settings_library">Library</string>
+    <string name="settings_excluded_folders">Excluded Folders</string>
+    <string name="settings_smart_filter">Smart Filter</string>
+    <string name="settings_smart_filter_desc">Auto-exclude non-music folders</string>
+    <string name="settings_rescan">Rescan Library</string>
+    <string name="settings_add_folder">Add Folder</string>
+    <string name="settings_about">About</string>
+    <string name="settings_version">App Version</string>
+    <string name="settings_licenses">Open Source Licenses</string>
+
+    <!-- Smart filter info chip -->
+    <string name="smart_filter_chip">%d folders auto-hidden · Tap to review</string>
+
+    <!-- General -->
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="delete">Delete</string>
+    <string name="rename">Rename</string>
+    <string name="unknown_artist">Unknown Artist</string>
+    <string name="unknown_album">Unknown Album</string>
+    <string name="no_songs">No songs found</string>
+    <string name="scanning_library">Scanning library…</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- FEATURE: Project Scaffolding — Fallback colors -->
+<resources>
+    <color name="seed">#6750A4</color>
+    <color name="auraplay_primary">#BB86FC</color>
+    <color name="auraplay_secondary">#03DAC6</color>
+    <color name="auraplay_background">#121212</color>
+    <color name="auraplay_surface">#1E1E1E</color>
+</resources>
