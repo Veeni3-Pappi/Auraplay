@@ -1,16 +1,17 @@
 package com.aceshot.musicplayer.presentation.navigation
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.aceshot.musicplayer.presentation.screens.library.LibraryScreen
+import com.aceshot.musicplayer.presentation.screens.playlists.PlaylistsScreen
+import com.aceshot.musicplayer.presentation.screens.search.SearchScreen
+import com.aceshot.musicplayer.presentation.screens.settings.SettingsScreen
 
 @Composable
 fun NavGraph(navController: NavHostController, innerPadding: PaddingValues) {
@@ -20,23 +21,16 @@ fun NavGraph(navController: NavHostController, innerPadding: PaddingValues) {
         modifier = Modifier.padding(innerPadding)
     ) {
         composable(Screen.Library.route) {
-            PlaceholderScreen("Library Screen")
+            LibraryScreen()
         }
         composable(Screen.Search.route) {
-            PlaceholderScreen("Search Screen")
+            SearchScreen()
         }
         composable(Screen.Playlists.route) {
-            PlaceholderScreen("Playlists Screen")
+            PlaylistsScreen(onNavigateToDetail = { /* Navigate to detail */ })
         }
         composable(Screen.Settings.route) {
-            PlaceholderScreen("Settings Screen")
+            SettingsScreen()
         }
-    }
-}
-
-@Composable
-fun PlaceholderScreen(title: String) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = title)
     }
 }
