@@ -21,7 +21,8 @@ import com.aceshot.musicplayer.presentation.screens.settings.SettingsScreen
 fun NavGraph(
     navController: NavHostController,
     innerPadding: PaddingValues,
-    onPlaySongs: (List<Song>, Int) -> Unit
+    onPlaySongs: (List<Song>, Int) -> Unit,
+    onAddToPlaylist: (Song) -> Unit = {}
 ) {
     NavHost(
         navController = navController,
@@ -29,7 +30,7 @@ fun NavGraph(
         modifier = Modifier.padding(innerPadding)
     ) {
         composable(Screen.Library.route) {
-            LibraryScreen(onPlaySongs = onPlaySongs)
+            LibraryScreen(onPlaySongs = onPlaySongs, onAddToPlaylist = onAddToPlaylist)
         }
         composable(Screen.Search.route) {
             SearchScreen(onPlaySongs = onPlaySongs)

@@ -22,6 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aceshot.musicplayer.data.preferences.RepeatMode
 import com.aceshot.musicplayer.presentation.components.AnimatedPlayButton
 import com.aceshot.musicplayer.presentation.components.ArtworkImage
+import com.aceshot.musicplayer.presentation.components.WaveformVisualizer
 import com.aceshot.musicplayer.presentation.screens.library.formatDuration
 import com.aceshot.musicplayer.presentation.viewmodel.NowPlayingViewModel
 
@@ -75,12 +76,15 @@ fun NowPlayingScreen(
                 textAlign = TextAlign.Center
             )
             
-            Spacer(modifier = Modifier.height(32.dp))
-            
-            Slider(
-                value = progress,
-                onValueChange = { viewModel.seekTo(it) },
-                modifier = Modifier.fillMaxWidth()
+            Spacer(modifier = Modifier.height(24.dp))
+
+            WaveformVisualizer(
+                isPlaying = isPlaying,
+                progress = progress,
+                onSeek = { viewModel.seekTo(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
             )
 
             Row(

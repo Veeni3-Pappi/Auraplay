@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Folder
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.*
@@ -15,6 +16,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.aceshot.musicplayer.data.model.Album
 import com.aceshot.musicplayer.data.model.Artist
 import com.aceshot.musicplayer.data.model.Folder
 import com.aceshot.musicplayer.data.model.Genre
@@ -22,9 +24,11 @@ import com.aceshot.musicplayer.data.model.Song
 import com.aceshot.musicplayer.presentation.components.SortMenu
 import com.aceshot.musicplayer.presentation.viewmodel.LibraryViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LibraryScreen(
     onPlaySongs: (List<Song>, Int) -> Unit = { _, _ -> },
+    onAddToPlaylist: (Song) -> Unit = {},
     viewModel: LibraryViewModel = hiltViewModel()
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
@@ -36,58 +40,80 @@ fun LibraryScreen(
     val genres by viewModel.genres.collectAsStateWithLifecycle()
     val folders by viewModel.folders.collectAsStateWithLifecycle()
     val sortOrder by viewModel.sortOrder.collectAsStateWithLifecycle()
+    val filteredSongs by viewModel.filteredSongs.collectAsStateWithLifecycle()
+    val filterTitle by viewModel.filterTitle.collectAsStateWithLifecycle()
 
     Column(modifier = Modifier.fillMaxSize()) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(end = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            ScrollableTabRow(
-                selectedTabIndex = selectedTab,
-                edgePadding = 16.dp,
-                modifier = Modifier.weight(1f),
-                containerColor = MaterialTheme.colorScheme.surface,
-                divider = {}
-            ) {
-                tabs.forEachIndexed { index, title ->
-                    Tab(
-                        selected = selectedTab == index,
-                        onClick = { selectedTab = index },
-                        text = { Text(title) }
+        if (filterTitle != null) {
+            TopAppBar(
+                title = { Text(filterTitle ?: "") },
+                navigationIcon = {
+                    IconButton(onClick = { viewModel.clearFilter() }) {
+                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back")
+                    }
+                }
+            )
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(filteredSongs, key = { it.id }) { song ->
+                    SongListItem(
+                        song = song,
+                        onClick = { onPlaySongs(filteredSongs, filteredSongs.indexOf(song)) },
+                        onMenuClick = { onAddToPlaylist(song) }
                     )
                 }
             }
-            if (selectedTab == 0) {
-                SortMenu(currentSort = sortOrder, onSortSelected = { viewModel.setSortOrder(it) })
-            }
-        }
-
-        when (selectedTab) {
-            0 -> {
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(songs, key = { it.id }) { song ->
-                        SongListItem(
-                            song = song,
-                            onClick = { onPlaySongs(songs, songs.indexOf(song)) },
-                            onMenuClick = { /* Show options */ }
+        } else {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(end = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                ScrollableTabRow(
+                    selectedTabIndex = selectedTab,
+                    edgePadding = 16.dp,
+                    modifier = Modifier.weight(1f),
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    divider = {}
+                ) {
+                    tabs.forEachIndexed { index, title ->
+                        Tab(
+                            selected = selectedTab == index,
+                            onClick = { selectedTab = index },
+                            text = { Text(title) }
                         )
                     }
                 }
+                if (selectedTab == 0) {
+                    SortMenu(currentSort = sortOrder, onSortSelected = { viewModel.setSortOrder(it) })
+                }
             }
-            1 -> {
-                AlbumGrid(
-                    albums = albums,
-                    onAlbumClick = { /* Navigate to album */ }
-                )
-            }
-            2 -> {
-                ArtistList(artists = artists, onArtistClick = { /* Navigate to artist */ })
-            }
-            3 -> {
-                GenreList(genres = genres, onGenreClick = { /* Navigate to genre */ })
-            }
-            4 -> {
-                FolderList(folders = folders, onFolderClick = { /* Navigate to folder */ })
+
+            when (selectedTab) {
+                0 -> {
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        items(songs, key = { it.id }) { song ->
+                            SongListItem(
+                                song = song,
+                                onClick = { onPlaySongs(songs, songs.indexOf(song)) },
+                                onMenuClick = { onAddToPlaylist(song) }
+                            )
+                        }
+                    }
+                }
+                1 -> {
+                    AlbumGrid(
+                        albums = albums,
+                        onAlbumClick = { album -> viewModel.filterByAlbum(album.id, album.name) }
+                    )
+                }
+                2 -> {
+                    ArtistList(artists = artists, onArtistClick = { artist -> viewModel.filterByArtist(artist.name) })
+                }
+                3 -> {
+                    GenreList(genres = genres, onGenreClick = { genre -> viewModel.filterByGenre(genre.name) })
+                }
+                4 -> {
+                    FolderList(folders = folders, onFolderClick = { folder -> viewModel.filterByFolder(folder.path) })
+                }
             }
         }
     }

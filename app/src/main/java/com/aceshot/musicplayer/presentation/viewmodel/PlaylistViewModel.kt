@@ -34,4 +34,17 @@ class PlaylistViewModel @Inject constructor(
             playlistRepository.toggleFavorite(songId)
         }
     }
+
+    fun addSongToPlaylist(playlistId: Long, songId: Long) {
+        viewModelScope.launch {
+            playlistRepository.addSongToPlaylist(playlistId, songId)
+        }
+    }
+
+    fun createPlaylistAndAddSong(name: String, songId: Long) {
+        viewModelScope.launch {
+            val playlistId = playlistRepository.createPlaylist(name)
+            playlistRepository.addSongToPlaylist(playlistId, songId)
+        }
+    }
 }

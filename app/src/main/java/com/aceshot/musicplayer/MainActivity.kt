@@ -7,11 +7,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
+import com.aceshot.musicplayer.data.model.Song
+import com.aceshot.musicplayer.presentation.components.AddToPlaylistDialog
 import com.aceshot.musicplayer.presentation.components.MiniPlayer
 import com.aceshot.musicplayer.presentation.navigation.BottomNavBar
 import com.aceshot.musicplayer.presentation.navigation.NavGraph
@@ -19,6 +21,7 @@ import com.aceshot.musicplayer.presentation.navigation.Screen
 import com.aceshot.musicplayer.presentation.screens.onboarding.OnboardingScreen
 import com.aceshot.musicplayer.presentation.viewmodel.NowPlayingViewModel
 import com.aceshot.musicplayer.presentation.viewmodel.OnboardingViewModel
+import com.aceshot.musicplayer.presentation.viewmodel.PlaylistViewModel
 import com.aceshot.musicplayer.ui.theme.AuraplayTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,9 +43,32 @@ class MainActivity : ComponentActivity() {
                 } else {
                     val navController = rememberNavController()
                     val nowPlayingViewModel: NowPlayingViewModel = hiltViewModel()
+                    val playlistViewModel: PlaylistViewModel = hiltViewModel()
                     val currentSong by nowPlayingViewModel.currentSong.collectAsStateWithLifecycle()
                     val isPlaying by nowPlayingViewModel.isPlaying.collectAsStateWithLifecycle()
                     val progress by nowPlayingViewModel.progress.collectAsStateWithLifecycle()
+                    val playlists by playlistViewModel.playlists.collectAsStateWithLifecycle()
+
+                    var songToAddToPlaylist by remember { mutableStateOf<Song?>(null) }
+
+                    if (songToAddToPlaylist != null) {
+                        AddToPlaylistDialog(
+                            playlists = playlists,
+                            onDismiss = { songToAddToPlaylist = null },
+                            onPlaylistSelected = { playlistId ->
+                                songToAddToPlaylist?.let { song ->
+                                    playlistViewModel.addSongToPlaylist(playlistId, song.id)
+                                }
+                                songToAddToPlaylist = null
+                            },
+                            onCreateNew = { name ->
+                                songToAddToPlaylist?.let { song ->
+                                    playlistViewModel.createPlaylistAndAddSong(name, song.id)
+                                }
+                                songToAddToPlaylist = null
+                            }
+                        )
+                    }
 
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
@@ -68,6 +94,9 @@ class MainActivity : ComponentActivity() {
                             innerPadding = innerPadding,
                             onPlaySongs = { songs, index ->
                                 nowPlayingViewModel.playSong(songs, index)
+                            },
+                            onAddToPlaylist = { song ->
+                                songToAddToPlaylist = song
                             }
                         )
                     }

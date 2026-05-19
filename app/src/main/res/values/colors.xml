@@ -6,4 +6,5 @@
     <color name="auraplay_secondary">#03DAC6</color>
     <color name="auraplay_background">#121212</color>
     <color name="auraplay_surface">#1E1E1E</color>
+    <color name="ic_launcher_background">#D4EAFF</color>
 </resources>

@@ -2,6 +2,7 @@ package com.aceshot.musicplayer.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.aceshot.musicplayer.data.model.Song
 import com.aceshot.musicplayer.data.repository.MusicRepository
 import com.aceshot.musicplayer.data.repository.SettingsRepository
 import com.aceshot.musicplayer.data.repository.SortOrder
@@ -49,10 +50,49 @@ class LibraryViewModel @Inject constructor(
     val folders = musicRepository.getFolders()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
+    private val _filteredSongs = MutableStateFlow<List<Song>>(emptyList())
+    val filteredSongs = _filteredSongs.asStateFlow()
+
+    private val _filterTitle = MutableStateFlow<String?>(null)
+    val filterTitle = _filterTitle.asStateFlow()
+
     fun setSortOrder(order: SortOrder) {
         _sortOrder.value = order
         viewModelScope.launch {
             settingsRepository.setSortOrder(order.name)
         }
+    }
+
+    fun filterByAlbum(albumId: Long, albumName: String) {
+        _filterTitle.value = albumName
+        viewModelScope.launch {
+            musicRepository.getSongsByAlbum(albumId).collect { _filteredSongs.value = it }
+        }
+    }
+
+    fun filterByArtist(artist: String) {
+        _filterTitle.value = artist
+        viewModelScope.launch {
+            musicRepository.getSongsByArtist(artist).collect { _filteredSongs.value = it }
+        }
+    }
+
+    fun filterByGenre(genre: String) {
+        _filterTitle.value = genre
+        viewModelScope.launch {
+            musicRepository.getSongsByGenre(genre).collect { _filteredSongs.value = it }
+        }
+    }
+
+    fun filterByFolder(folderPath: String) {
+        _filterTitle.value = folderPath.substringAfterLast("/")
+        viewModelScope.launch {
+            musicRepository.getSongsByFolder(folderPath).collect { _filteredSongs.value = it }
+        }
+    }
+
+    fun clearFilter() {
+        _filterTitle.value = null
+        _filteredSongs.value = emptyList()
     }
 }

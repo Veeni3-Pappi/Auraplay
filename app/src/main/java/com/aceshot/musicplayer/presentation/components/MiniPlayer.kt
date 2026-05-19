@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -69,13 +68,12 @@ fun MiniPlayer(
                 modifier = Modifier.size(48.dp)
             )
         }
-        LinearProgressIndicator(
-            progress = { progress },
+        WaveformVisualizer(
+            isPlaying = isPlaying,
+            progress = progress,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(2.dp),
-            color = MaterialTheme.colorScheme.primary,
-            trackColor = MaterialTheme.colorScheme.surfaceVariant
+                .padding(horizontal = 8.dp)
         )
     }
 }
