@@ -9,6 +9,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.aceshot.musicplayer.data.model.Song
 import com.aceshot.musicplayer.presentation.screens.library.LibraryScreen
 import com.aceshot.musicplayer.presentation.screens.nowplaying.NowPlayingScreen
 import com.aceshot.musicplayer.presentation.screens.playlists.PlaylistDetailScreen
@@ -17,17 +18,21 @@ import com.aceshot.musicplayer.presentation.screens.search.SearchScreen
 import com.aceshot.musicplayer.presentation.screens.settings.SettingsScreen
 
 @Composable
-fun NavGraph(navController: NavHostController, innerPadding: PaddingValues) {
+fun NavGraph(
+    navController: NavHostController,
+    innerPadding: PaddingValues,
+    onPlaySongs: (List<Song>, Int) -> Unit
+) {
     NavHost(
         navController = navController,
         startDestination = Screen.Library.route,
         modifier = Modifier.padding(innerPadding)
     ) {
         composable(Screen.Library.route) {
-            LibraryScreen()
+            LibraryScreen(onPlaySongs = onPlaySongs)
         }
         composable(Screen.Search.route) {
-            SearchScreen()
+            SearchScreen(onPlaySongs = onPlaySongs)
         }
         composable(Screen.Playlists.route) {
             PlaylistsScreen(
@@ -49,7 +54,8 @@ fun NavGraph(navController: NavHostController, innerPadding: PaddingValues) {
             val playlistId = backStackEntry.arguments?.getLong("playlistId") ?: 0L
             PlaylistDetailScreen(
                 playlistId = playlistId,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                onPlaySongs = onPlaySongs
             )
         }
     }

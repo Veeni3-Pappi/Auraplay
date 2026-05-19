@@ -19,7 +19,8 @@ data class UserPreferences(
     val repeatMode: RepeatMode = RepeatMode.OFF,
     val crossfadeDurationMs: Int = 0,
     val minDurationFilterMs: Long = 60_000L,
-    val lastScanTimestamp: Long = 0L
+    val lastScanTimestamp: Long = 0L,
+    val sortOrder: String = "TITLE"
 )
 
 @Singleton
@@ -34,6 +35,7 @@ class UserPreferencesManager @Inject constructor(
         val CROSSFADE_DURATION_MS = intPreferencesKey("crossfade_duration_ms")
         val MIN_DURATION_FILTER_MS = longPreferencesKey("min_duration_filter_ms")
         val LAST_SCAN_TIMESTAMP = longPreferencesKey("last_scan_timestamp")
+        val SORT_ORDER = stringPreferencesKey("sort_order")
     }
 
     val preferencesFlow: Flow<UserPreferences> = dataStore.data
@@ -48,7 +50,8 @@ class UserPreferencesManager @Inject constructor(
                 repeatMode = RepeatMode.valueOf(preferences[REPEAT_MODE] ?: RepeatMode.OFF.name),
                 crossfadeDurationMs = preferences[CROSSFADE_DURATION_MS] ?: 0,
                 minDurationFilterMs = preferences[MIN_DURATION_FILTER_MS] ?: 60_000L,
-                lastScanTimestamp = preferences[LAST_SCAN_TIMESTAMP] ?: 0L
+                lastScanTimestamp = preferences[LAST_SCAN_TIMESTAMP] ?: 0L,
+                sortOrder = preferences[SORT_ORDER] ?: "TITLE"
             )
         }
 
@@ -78,5 +81,9 @@ class UserPreferencesManager @Inject constructor(
 
     suspend fun updateLastScanTimestamp(timestamp: Long) {
         dataStore.edit { it[LAST_SCAN_TIMESTAMP] = timestamp }
+    }
+
+    suspend fun updateSortOrder(sortOrder: String) {
+        dataStore.edit { it[SORT_ORDER] = sortOrder }
     }
 }

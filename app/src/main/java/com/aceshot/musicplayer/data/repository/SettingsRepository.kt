@@ -18,6 +18,7 @@ class SettingsRepository @Inject constructor(
     val repeatMode: Flow<RepeatMode> = prefsManager.preferencesFlow.map { it.repeatMode }
     val crossfadeDurationMs: Flow<Int> = prefsManager.preferencesFlow.map { it.crossfadeDurationMs }
     val minDurationFilterMs: Flow<Long> = prefsManager.preferencesFlow.map { it.minDurationFilterMs }
+    val sortOrder: Flow<String> = prefsManager.preferencesFlow.map { it.sortOrder }
 
     suspend fun setThemeMode(mode: ThemeMode) = prefsManager.updateThemeMode(mode)
     suspend fun setOnboardingCompleted(completed: Boolean) = prefsManager.updateHasCompletedOnboarding(completed)
@@ -25,4 +26,5 @@ class SettingsRepository @Inject constructor(
     suspend fun setRepeatMode(mode: RepeatMode) = prefsManager.updateRepeatMode(mode)
     suspend fun setCrossfadeDuration(durationMs: Int) = prefsManager.updateCrossfadeDuration(durationMs)
     suspend fun setMinDurationFilter(durationMs: Long) = prefsManager.updateMinDurationFilter(durationMs)
+    suspend fun setSortOrder(sortOrder: String) = prefsManager.updateSortOrder(sortOrder)
 }

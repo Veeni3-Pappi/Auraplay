@@ -13,11 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.aceshot.musicplayer.data.model.Song
 import com.aceshot.musicplayer.presentation.screens.library.SongListItem
 import com.aceshot.musicplayer.presentation.viewmodel.SearchViewModel
 
 @Composable
 fun SearchScreen(
+    onPlaySongs: (List<Song>, Int) -> Unit = { _, _ -> },
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     val query by viewModel.query.collectAsStateWithLifecycle()
@@ -72,7 +74,7 @@ fun SearchScreen(
                 items(results, key = { it.id }) { song ->
                     SongListItem(
                         song = song,
-                        onClick = { /* Play */ },
+                        onClick = { onPlaySongs(results, results.indexOf(song)) },
                         onMenuClick = { /* Options */ }
                     )
                 }

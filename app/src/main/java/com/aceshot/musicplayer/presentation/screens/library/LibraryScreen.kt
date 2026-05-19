@@ -18,11 +18,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aceshot.musicplayer.data.model.Artist
 import com.aceshot.musicplayer.data.model.Folder
 import com.aceshot.musicplayer.data.model.Genre
+import com.aceshot.musicplayer.data.model.Song
 import com.aceshot.musicplayer.presentation.components.SortMenu
 import com.aceshot.musicplayer.presentation.viewmodel.LibraryViewModel
 
 @Composable
 fun LibraryScreen(
+    onPlaySongs: (List<Song>, Int) -> Unit = { _, _ -> },
     viewModel: LibraryViewModel = hiltViewModel()
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
@@ -66,7 +68,7 @@ fun LibraryScreen(
                     items(songs, key = { it.id }) { song ->
                         SongListItem(
                             song = song,
-                            onClick = { /* Play song */ },
+                            onClick = { onPlaySongs(songs, songs.indexOf(song)) },
                             onMenuClick = { /* Show options */ }
                         )
                     }

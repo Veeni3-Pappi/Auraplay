@@ -23,6 +23,7 @@ import com.aceshot.musicplayer.presentation.viewmodel.PlaylistDetailViewModel
 fun PlaylistDetailScreen(
     playlistId: Long,
     onBack: () -> Unit,
+    onPlaySongs: (List<Song>, Int) -> Unit = { _, _ -> },
     viewModel: PlaylistDetailViewModel = hiltViewModel()
 ) {
     val songs by viewModel.songs.collectAsStateWithLifecycle()
@@ -76,7 +77,7 @@ fun PlaylistDetailScreen(
                 items(songs, key = { it.id }) { song ->
                     SongListItem(
                         song = song,
-                        onClick = { /* Play song from playlist */ },
+                        onClick = { onPlaySongs(songs, songs.indexOf(song)) },
                         onMenuClick = { /* Options: remove from playlist */ }
                     )
                 }

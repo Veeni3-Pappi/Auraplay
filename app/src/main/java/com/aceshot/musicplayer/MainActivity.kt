@@ -65,7 +65,10 @@ class MainActivity : ComponentActivity() {
                     ) { innerPadding ->
                         NavGraph(
                             navController = navController,
-                            innerPadding = innerPadding
+                            innerPadding = innerPadding,
+                            onPlaySongs = { songs, index ->
+                                nowPlayingViewModel.playSong(songs, index)
+                            }
                         )
                     }
                 }
