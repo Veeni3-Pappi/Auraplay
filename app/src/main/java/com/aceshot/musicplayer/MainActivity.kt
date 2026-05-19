@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.aceshot.musicplayer.data.model.Song
 import com.aceshot.musicplayer.presentation.components.AddToPlaylistDialog
@@ -70,21 +71,27 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
+                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                    val currentRoute = navBackStackEntry?.destination?.route
+                    val showMiniPlayer = currentRoute != Screen.NowPlaying.route
+
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
                         bottomBar = {
                             Column {
-                                MiniPlayer(
-                                    song = currentSong,
-                                    isPlaying = isPlaying,
-                                    progress = progress,
-                                    onPlayPauseClick = { nowPlayingViewModel.togglePlayPause() },
-                                    onClick = {
-                                        navController.navigate(Screen.NowPlaying.route) {
-                                            launchSingleTop = true
+                                if (showMiniPlayer) {
+                                    MiniPlayer(
+                                        song = currentSong,
+                                        isPlaying = isPlaying,
+                                        progress = progress,
+                                        onPlayPauseClick = { nowPlayingViewModel.togglePlayPause() },
+                                        onClick = {
+                                            navController.navigate(Screen.NowPlaying.route) {
+                                                launchSingleTop = true
+                                            }
                                         }
-                                    }
-                                )
+                                    )
+                                }
                                 BottomNavBar(navController)
                             }
                         }

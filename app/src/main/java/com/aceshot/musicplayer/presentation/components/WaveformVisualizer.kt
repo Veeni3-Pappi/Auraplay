@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import kotlin.math.sin
@@ -27,22 +28,22 @@ fun WaveformVisualizer(
     onSeek: ((Float) -> Unit)? = null
 ) {
     val primaryColor = MaterialTheme.colorScheme.primary
-    val surfaceVariant = MaterialTheme.colorScheme.surfaceVariant
+    val trackColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
 
     val infiniteTransition = rememberInfiniteTransition(label = "waveform")
     val phase by infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = if (isPlaying) 2f * Math.PI.toFloat() else 0f,
+        targetValue = 2f * Math.PI.toFloat(),
         animationSpec = infiniteRepeatable(
-            animation = tween(1500, easing = LinearEasing),
+            animation = tween(2000, easing = LinearEasing),
             repeatMode = RepeatMode.Restart
         ),
         label = "phase"
     )
 
     val amplitude by animateFloatAsState(
-        targetValue = if (isPlaying) 1f else 0.2f,
-        animationSpec = tween(400),
+        targetValue = if (isPlaying) 1f else 0.3f,
+        animationSpec = tween(500),
         label = "amplitude"
     )
 
@@ -72,50 +73,42 @@ fun WaveformVisualizer(
         val height = size.height
         val centerY = height / 2f
         val progressX = width * progress
-        val step = 3f
-        val frequency = 6f * Math.PI.toFloat()
+        val step = 2f
+        val frequency = 4f * Math.PI.toFloat()
+        val waveAmplitude = height * 0.25f * amplitude
+        val currentPhase = if (isPlaying) phase else 0f
 
-        // Background waveform (inactive part after progress)
-        val bgPath = Path()
-        bgPath.moveTo(progressX, centerY)
-        var x = progressX
+        // Build one single continuous waveform path
+        val wavePath = Path()
+        wavePath.moveTo(0f, centerY)
+        var x = 0f
         while (x <= width) {
             val normalizedX = x / width
-            val waveAmp = height * 0.3f * amplitude * 0.4f
-            val wave = sin(normalizedX * frequency + phase * 0.3f) * waveAmp
-            bgPath.lineTo(x, centerY + wave)
+            val wave = sin(normalizedX * frequency + currentPhase) * waveAmplitude
+            wavePath.lineTo(x, centerY + wave)
             x += step
         }
-        drawPath(
-            path = bgPath,
-            color = surfaceVariant,
-            style = Stroke(width = 3.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round)
-        )
 
-        // Active waveform (from 0 to progress)
-        if (progressX > 0f) {
-            val activePath = Path()
-            activePath.moveTo(0f, centerY)
-            x = 0f
-            while (x <= progressX) {
-                val normalizedX = x / width
-                val waveAmp = height * 0.3f * amplitude
-                val wave = sin(normalizedX * frequency + phase) * waveAmp
-                activePath.lineTo(x, centerY + wave)
-                x += step
-            }
-            drawPath(
-                path = activePath,
-                color = primaryColor,
-                style = Stroke(width = 3.5f.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round)
-            )
+        val strokeWidth = 3.dp.toPx()
+        val stroke = Stroke(width = strokeWidth, cap = StrokeCap.Round, join = StrokeJoin.Round)
+
+        // Draw inactive portion (full track, behind)
+        clipRect(left = progressX, right = width) {
+            drawPath(path = wavePath, color = trackColor, style = stroke)
         }
 
-        // Thumb dot on the waveform at current position
-        val thumbWave = sin((progress) * frequency + phase) * (height * 0.3f * amplitude)
+        // Draw active portion (played, clipped to progress)
+        if (progressX > 0f) {
+            clipRect(right = progressX) {
+                drawPath(path = wavePath, color = primaryColor, style = stroke)
+            }
+        }
+
+        // Thumb dot at current progress position
+        val thumbWave = sin(progress * frequency + currentPhase) * waveAmplitude
         drawCircle(
             color = primaryColor,
-            radius = 6.dp.toPx(),
+            radius = 5.dp.toPx(),
             center = Offset(progressX, centerY + thumbWave)
         )
     }
