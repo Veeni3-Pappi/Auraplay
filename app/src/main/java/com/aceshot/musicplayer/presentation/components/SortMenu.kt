@@ -2,7 +2,7 @@ package com.aceshot.musicplayer.presentation.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Sort
+import androidx.compose.material.icons.automirrored.rounded.Sort
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -26,7 +26,7 @@ fun SortMenu(
 
     Box(modifier = modifier) {
         IconButton(onClick = { expanded = true }) {
-            Icon(Icons.Rounded.Sort, contentDescription = "Sort")
+            Icon(Icons.AutoMirrored.Rounded.Sort, contentDescription = "Sort")
         }
         DropdownMenu(
             expanded = expanded,

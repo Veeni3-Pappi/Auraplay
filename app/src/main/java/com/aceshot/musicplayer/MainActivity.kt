@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.aceshot.musicplayer.presentation.components.MiniPlayer
 import com.aceshot.musicplayer.presentation.navigation.BottomNavBar
 import com.aceshot.musicplayer.presentation.navigation.NavGraph
+import com.aceshot.musicplayer.presentation.navigation.Screen
 import com.aceshot.musicplayer.presentation.screens.onboarding.OnboardingScreen
 import com.aceshot.musicplayer.presentation.viewmodel.NowPlayingViewModel
 import com.aceshot.musicplayer.presentation.viewmodel.OnboardingViewModel
@@ -52,7 +53,11 @@ class MainActivity : ComponentActivity() {
                                     isPlaying = isPlaying,
                                     progress = progress,
                                     onPlayPauseClick = { nowPlayingViewModel.togglePlayPause() },
-                                    onClick = { /* Navigate to NowPlayingScreen */ }
+                                    onClick = {
+                                        navController.navigate(Screen.NowPlaying.route) {
+                                            launchSingleTop = true
+                                        }
+                                    }
                                 )
                                 BottomNavBar(navController)
                             }

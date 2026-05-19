@@ -3,11 +3,11 @@ package com.aceshot.musicplayer.presentation.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LibraryMusic
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.QueueMusic
+import androidx.compose.material.icons.automirrored.filled.QueueMusic
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.LibraryMusic
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.QueueMusic
+import androidx.compose.material.icons.automirrored.outlined.QueueMusic
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -31,7 +31,7 @@ fun BottomNavBar(navController: NavController) {
     val items = listOf(
         BottomNavItem("Library", Screen.Library.route, Icons.Filled.LibraryMusic, Icons.Outlined.LibraryMusic),
         BottomNavItem("Search", Screen.Search.route, Icons.Filled.Search, Icons.Outlined.Search),
-        BottomNavItem("Playlists", Screen.Playlists.route, Icons.Filled.QueueMusic, Icons.Outlined.QueueMusic),
+        BottomNavItem("Playlists", Screen.Playlists.route, Icons.AutoMirrored.Filled.QueueMusic, Icons.AutoMirrored.Outlined.QueueMusic),
         BottomNavItem("Settings", Screen.Settings.route, Icons.Filled.Settings, Icons.Outlined.Settings)
     )
 

@@ -4,9 +4,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -14,7 +16,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aceshot.musicplayer.presentation.screens.library.SongListItem
 import com.aceshot.musicplayer.presentation.viewmodel.SearchViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel = hiltViewModel()
@@ -23,31 +24,58 @@ fun SearchScreen(
     val results by viewModel.searchResults.collectAsStateWithLifecycle()
 
     Column(modifier = Modifier.fillMaxSize()) {
-        SearchBar(
-            query = query,
-            onQueryChange = { viewModel.setQuery(it) },
-            onSearch = { /* Execute */ },
-            active = false,
-            onActiveChange = { },
+        OutlinedTextField(
+            value = query,
+            onValueChange = { viewModel.setQuery(it) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
             placeholder = { Text("Search songs, artists, albums...") },
-            leadingIcon = { Icon(Icons.Rounded.Search, contentDescription = "Search") }
-        ) {
-            // SearchBar content if active
-        }
+            leadingIcon = { Icon(Icons.Rounded.Search, contentDescription = "Search") },
+            trailingIcon = {
+                if (query.isNotEmpty()) {
+                    IconButton(onClick = { viewModel.setQuery("") }) {
+                        Icon(Icons.Rounded.Close, contentDescription = "Clear")
+                    }
+                }
+            },
+            singleLine = true
+        )
 
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 80.dp)
-        ) {
-            items(results, key = { it.id }) { song ->
-                SongListItem(
-                    song = song,
-                    onClick = { /* Play */ },
-                    onMenuClick = { /* Options */ }
+        if (query.isBlank()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Search your music library",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+            }
+        } else if (results.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "No results found",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(bottom = 80.dp)
+            ) {
+                items(results, key = { it.id }) { song ->
+                    SongListItem(
+                        song = song,
+                        onClick = { /* Play */ },
+                        onMenuClick = { /* Options */ }
+                    )
+                }
             }
         }
     }

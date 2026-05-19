@@ -1,7 +1,7 @@
 package com.aceshot.musicplayer.player
 
-import androidx.media3.exoplayer.source.DefaultShuffleOrder
 import androidx.media3.exoplayer.source.ShuffleOrder
+import androidx.media3.exoplayer.source.ShuffleOrder.DefaultShuffleOrder
 import com.aceshot.musicplayer.data.model.Song
 import java.util.Random
 
